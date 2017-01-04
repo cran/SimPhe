@@ -1,22 +1,23 @@
 ---
-title: "Simulate Phenotype(s)"
+title: "SimPhe"
 author: "Beibei Jiang"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Extending ggplot2}
+  %\VignetteIndexEntry{SimPhe}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-*SimPhe* is an R package dedicated to simulate multiple phenotyes based on genotyping data. The main feature of this package is the possibility to take genetic epistatic effects, not only additive-additive interaction but also additive-dominance and dominance-dominance, heritability and multiple phenotypes into account. Moreover, we provide a variety of convenient functions, including suggestion for set the variation of random variable according to user specified genetic effects and flexible support for input formats, as well as output formats. It also supports the input of plink formats.
+
+This vignette introduces how to use *SimPhe*, an R package dedicated to simulate multiple phenotyes based on genotyping data. The main feature of this package is the possibility to take genetic epistatic effects, not only additive-additive interaction but also additive-dominance and dominance-dominance, heritability and multiple phenotypes into account. Moreover, we provide a variety of convenient functions, including suggestion for set the variation of random variable according to user specified genetic effects and flexible support for input formats, as well as output formats. It also supports the input of plink formats.
 
 
-##### Installation
+## Installation
 ```{r, eval = F, error = F, results='hide'}
 install.packages(SimPhe)
 ```
 
-##### Sample implementation
+## Sample implementation
 ```{r, echo = T, results='hide'}
 # load package
 library(SimPhe)
@@ -161,7 +162,7 @@ apply(corphe, 2, sd)
 # test correlation
 cor.test(corphe[, "p1"], corphe[, "p2"])
 ```
-Obviously, there is no significant difference on mean and standard deviation between the initial phenotypes and the new phenotypes.
+Obviously, there is no significant difference on means and standard deviations between the initial phenotypes and the new phenotypes.
 
 
 

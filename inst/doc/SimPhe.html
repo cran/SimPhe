@@ -201,14 +201,14 @@ hr {
 </head>
 
 <body>
-<p><em>SimPhe</em> is an R package dedicated to simulate multiple phenotyes based on genotyping data. The main feature of this package is the possibility to take genetic epistatic effects, not only additive-additive interaction but also additive-dominance and dominance-dominance, heritability and multiple phenotypes into account. Moreover, we provide a variety of convenient functions, including suggestion for set the variation of random variable according to user specified genetic effects and flexible support for input formats, as well as output formats. It also supports the input of plink formats.</p>
+<p>This vignette introduces how to use <em>SimPhe</em>, an R package dedicated to simulate multiple phenotyes based on genotyping data. The main feature of this package is the possibility to take genetic epistatic effects, not only additive-additive interaction but also additive-dominance and dominance-dominance, heritability and multiple phenotypes into account. Moreover, we provide a variety of convenient functions, including suggestion for set the variation of random variable according to user specified genetic effects and flexible support for input formats, as well as output formats. It also supports the input of plink formats.</p>
 
-<h5>Installation</h5>
+<h2>Installation</h2>
 
 <pre><code class="r">install.packages(SimPhe)
 </code></pre>
 
-<h5>Sample implementation</h5>
+<h2>Sample implementation</h2>
 
 <pre><code class="r"># load package
 library(SimPhe)
@@ -501,7 +501,7 @@ cor.test(corphe[, &quot;p1&quot;], corphe[, &quot;p2&quot;])
 ## 0.6092611
 </code></pre>
 
-<p>Obviously, there is no significant difference on mean and standard deviation between the initial phenotypes and the new phenotypes.</p>
+<p>Obviously, there is no significant difference on means and standard deviations between the initial phenotypes and the new phenotypes.</p>
 
 </body>
 

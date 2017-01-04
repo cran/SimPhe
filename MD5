@@ -1,4 +1,4 @@
-52121be1be51f1e8bdda9c7aaae51ab0 *DESCRIPTION
+9c4fa0ceac91751280bf5e09c2cfdebb *DESCRIPTION
 bb1f71e6c778cc12616e1058cb8ee337 *NAMESPACE
 7bf47131d3a7759d3995391d48894e2d *R/calcuheritability.R
 cd2110255e1a48f31b0d74fd8c624e22 *R/correlatedpheno.R
@@ -10,15 +10,15 @@ ac6ed8a335c55be187578c172637999f *R/getgenotype.R
 04b546364d07df4a4092bca2819f09a3 *R/imports.R
 1020ea3e11849bbfd1d7e766f4f57cb9 *R/readpars.R
 82858dde499f1e2f13300edc3b72d631 *R/simPheno.R
-cdce345acfbc403cc28782c124d07fbb *build/vignette.rds
+e276853f131df5f9efbe098847a1a180 *build/vignette.rds
 b0cec27576fd3d8049487e42b35b0948 *data/allele.freq.RData
 56c77d05aa5111fddaaf45687465e1c6 *data/epistasis.pars.RData
 bd9b5263409cc214d961cdc032194ce3 *data/gene.coefficients.RData
 31339c605cc12475362a7f30c43c072a *data/genepars.RData
 d313b4f7d93ad53e5ef229d96457f408 *data/maineff.pars.RData
 42b77874fedbca3d3975ca4d2ef96954 *inst/doc/SimPhe.R
-26a3af18184de450963ab75893fa923b *inst/doc/SimPhe.Rmd
-a1670996b888b2bd59b1de1630022c50 *inst/doc/SimPhe.html
+e151ce3af93f138b0e84edc093ad074f *inst/doc/SimPhe.Rmd
+35a3021c6c515f199bb3fbdeb269cb09 *inst/doc/SimPhe.html
 1c69e163e55b7337b0e216834b25fb38 *inst/extdata/10SNP.txt
 b70066f1b1cb99489b0ef67079ee0eae *inst/extdata/bdemo.bed
 6dc2feeb5b6aea73bbfb28b6a1fd189a *inst/extdata/bdemo.bim
@@ -53,4 +53,4 @@ b11b76e660c6692122013a17b00d5bc7 *man/regextract.Rd
 698bea7f4520524a4048a7588347ebb9 *man/specify.pars.Rd
 eb07c13c3d8d60e189fa5f894b09b166 *tests/testthat.R
 b8dfad2e0f18634c40a3245e26cd071b *tests/testthat/testgs.R
-26a3af18184de450963ab75893fa923b *vignettes/SimPhe.Rmd
+e151ce3af93f138b0e84edc093ad074f *vignettes/SimPhe.Rmd
