@@ -56,4 +56,3 @@ genetic.scale(SNPA = 1, SNPB = 0)
 \author{
 Benno Pütz \email{puetz@mpipsykl.mpg.de} and Beibei Jiang \email{beibei_jiang@psych.mpg.de}
 }
-

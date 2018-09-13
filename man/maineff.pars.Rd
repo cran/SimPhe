@@ -18,4 +18,3 @@ A dataset containing the parameter settings for main effects.
 maineff.pars.
 }
 \keyword{datasets}
-

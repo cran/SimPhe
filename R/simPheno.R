@@ -1,18 +1,24 @@
 ##' Main process of simulation for phenotypes
+##'
+##' further discussion on pattern
 ##' @title Simulation for phenotypes (SimPhe main process)
 ##' @export
-##' @param fgenetic.pars the file of parameters settings
+##' @param sim.pars a prepared list containing the parameters settings for simulation or a file of parameters settings.
 ##'                    Please set your own parameters
-##'                    following the same structure as
+##'                    following the same structure as the object \code{genepars} or as the file
 ##'                    \code{simupars.txt}
 ##'                    (you could find example file \cr
-##'                    \code{system.file("extdata","simupars.txt",package="SimPhe")}).\cr
-##'                    To to specify heritability, there
+##'                    \code{system.file("extdata","simupars.txt",package="SimPhe")}).\cr\cr
+##'                    To specify heritability, there
 ##'                    are two ways: one is to set
-##'                    heritability in parameter file.
+##'                    heritability in parameter file or in the prepared list object which will futher pass to \code{sim.pars}.
 ##'                    Another way is to set \code{noise.var}
 ##'                    by using function \code{\link{get.noise.var}}
-##'                    given specify \code{heritability}. \cr
+##'                    given specify \code{heritability}. \cr\cr
+##'
+##'                    List format: please follow the example of the object \code{genepars}.
+##'                    The meaning of each elment in the list is similar like the file format description below.\cr\cr
+##'
 ##'                    File format: please follow the example of the \code{simupars.txt} file
 ##'                    found in the inst/extdata/ directory of the package (run \cr
 ##'                    \code{system.file("extdata", "simupars.txt", package="SimPhe")} \cr
@@ -43,6 +49,7 @@
 ##'                         }}
 ##' }
 ##'                    Similar meanings for "[P2mean]", "[P2main]", "[P2epistasis]", and so on.
+##'
 ##' @param fgeno file to read genotype information from or pre-read data.frame
 ##'                    with that information (matching the output format of
 ##'                    \code{\link{read.geno}}).
@@ -78,7 +85,7 @@
 ##'                   is overridden by the heritability setting in the
 ##'                   simulation parameter file. If heritability is
 ##'                   given in parameter file then \code{noise.var} will not work.
-##' @param pattern match pattern for detecting the phenotype index.
+##' @param pattern ignore pattern for detecting the phenotype index from the parameter names.
 ##'                Default is "[[:alpha:]]+" which means letters.
 ##' @param genetic.model a string show the genetic model to use for simulation.
 ##'                   Default is "epistasis".
@@ -89,18 +96,26 @@
 ##'                   Benno Pütz \email{puetz@@psych.mpg.de}
 ##' @examples
 ##' #### file path of example
-##'
 ##' # simulation parameters:
 ##' fpar.path <- system.file("extdata", "simupars.txt", package="SimPhe")
 ##'
 ##' # genotype file: rows are individuals and columns are SNPs
 ##' fgeno.path <- system.file("extdata", "10SNP.txt", package="SimPhe")
 ##'
+##'
+##' #### instead of a parameter file, prepared list like genepars also works
+##' genepars
+##'
+##'
 ##' #### simulate phenotype(s)
-##' phe <- sim.phe(fgenetic.pars = fpar.path, fgeno = fgeno.path, ftype = "snp.head", fwrite = FALSE)
+##' phe <- sim.phe(sim.pars = fpar.path, fgeno = fgeno.path, ftype = "snp.head", fwrite = FALSE)
+##' # or
+##' phe <- sim.phe(sim.pars = genepars, fgeno = fgeno.path, ftype = "snp.head", fwrite = FALSE)
+##'
+##' # the simulated phenotype(s)
 ##' str(phe)
 ##' head(phe)
-sim.phe <- function(fgenetic.pars = NULL,
+sim.phe <- function(sim.pars = NULL,
                     fgeno         = NULL,
                     ftype         = c("ind.head", "plink", "snp.head"),
                     fwrite        = TRUE,
@@ -113,81 +128,85 @@ sim.phe <- function(fgenetic.pars = NULL,
                     plink.path    = system("which plink"),
                     genetic.model = "epistasis",
                     ...){
-    if(!is.na(seed))
-        set.seed(seed)
+  if(!is.na(seed))
+    set.seed(seed)
 
-    ftype <- tryCatch(match.arg(ftype),
-                      error = function(e) {
-                          print(e)
-                          print(class(e))
-                          frmls <- eval(formals(sys.function(1))[['ftype']])
-                          warning("cannot handle ftype '", ftype,
-                                  "', possible options are:\n\t",
-                                  paste0(frmls, collapse  = ', '),
-                                  "\n\nWill use default")
-                          return(frmls[1])
-                      }
-                      )
+  ftype <- tryCatch(match.arg(ftype),
+                    error = function(e) {
+                      print(e)
+                      print(class(e))
+                      frmls <- eval(formals(sys.function(1))[['ftype']])
+                      warning("cannot handle ftype '", ftype,
+                              "', possible options are:\n\t",
+                              paste0(frmls, collapse  = ', '),
+                              "\n\nWill use default")
+                      return(frmls[1])
+                    }
+  )
+  if(is.list(sim.pars)){
+    genetic.pars <- sim.pars
+  }else{
+    genetic.pars <- read.simu.pars(file = sim.pars)    # test for NULL there
+  }
 
-    genetic.pars <- read.simu.pars(file = fgenetic.pars)    # test for NULL there
 
-    nphe <- length(unique(na.omit(as.numeric(unlist(strsplit(names(genetic.pars),
-                                                             split = pattern))))))
-    if (!is.data.frame(fgeno)) {
-        geno <- read.geno(fname      = fgeno,               # test for NULL there
-                          ftype      = ftype,
-                          plink.path = plink.path)
+  nphe <- length(unique(na.omit(as.numeric(unlist(strsplit(names(genetic.pars),
+                                                           split = pattern))))))
+  if (!is.data.frame(fgeno)) {
+    geno <- read.geno(fname      = fgeno,               # test for NULL there
+                      ftype      = ftype,
+                      plink.path = plink.path)
 
+  } else {
+    geno <- fgeno
+  }
+  check.snp.par(genetic.pars = genetic.pars,
+                nphe         = nphe)
+
+
+  phe <- list()
+  for (i in 1:nphe) {
+    # calculate frequency
+    genetic.pars[[paste0("P", i, "frequency")]] <- get.freq(geno     = geno,
+                                                            epi.pars = specify.pars(genetic.pars = genetic.pars,
+                                                                                    effect.type  = "epistasis",
+                                                                                    phe.index    = i))
+    gene.coef <- get.gene.coef(main.pars = specify.pars(genetic.pars = genetic.pars,
+                                                        effect.type  = "main",
+                                                        phe.index    = i),
+                               epi.pars  = specify.pars(genetic.pars = genetic.pars,
+                                                        effect.type  = "epistasis",
+                                                        phe.index    = i),
+                               model     = genetic.model)
+
+    if(!is.null(genetic.pars[[paste0("P", i, "heritability")]])){
+      exp.noise.var <- get.noise.var(gene.coef    = gene.coef,
+                                     freq         = genetic.pars[[paste0("P", i, "frequency")]],
+                                     Dskim        = Dskim,
+                                     heritability = as.numeric(genetic.pars[[paste0("P", i, "heritability")]]))
     } else {
-        geno <- fgeno
+      exp.noise.var <- noise.var
+      # calculate heritability
+      genetic.pars[[paste0("P", i, "heritability")]] <- calc.herit(gene.coef = gene.coef,
+                                                                   freq      = genetic.pars[[paste0("P", i, "frequency")]],
+                                                                   noise.var = exp.noise.var)
     }
-    check.snp.par(genetic.pars = genetic.pars,
-                  nphe         = nphe)
 
-
-    phe <- list()
-    for (i in 1:nphe) {
-                                        # calculate frequency
-        genetic.pars[[paste0("P", i, "frequency")]] <- get.freq(geno     = geno,
-                                                                epi.pars = specify.pars(genetic.pars = genetic.pars,
-                                                                    effect.type  = "epistasis",
-                                                                    phe.index    = i))
-        gene.coef <- get.gene.coef(main.pars = specify.pars(genetic.pars = genetic.pars,
-                                       effect.type  = "main",
-                                       phe.index    = i),
-                                   epi.pars  = specify.pars(genetic.pars = genetic.pars,
-                                       effect.type  = "epistasis",
-                                       phe.index    = i),
-                                   model     = genetic.model)
-
-        if(!is.null(genetic.pars[[paste0("P", i, "heritability")]])){
-                exp.noise.var <- get.noise.var(gene.coef    = gene.coef,
-                                               freq         = genetic.pars[[paste0("P", i, "frequency")]],
-                                               Dskim        = Dskim,
-                                               heritability = as.numeric(genetic.pars[[paste0("P", i, "heritability")]]))
-        } else {
-            exp.noise.var <- noise.var
-                                        # calculate heritability
-            genetic.pars[[paste0("P", i, "heritability")]] <- calc.herit(gene.coef = gene.coef,
-                                                                         freq      = genetic.pars[[paste0("P", i, "frequency")]],
-                                                                         noise.var = exp.noise.var)
-        }
-
-        phe[[paste0("p", i)]] <- as.numeric(genetic.pars[[paste0("P", i, "mean")]]) +
-            gene.effect(geno      = geno,
-                        gene.coef = gene.coef,
-                        model     = genetic.model) +
-            rnorm(nrow(geno),
-                  sd = sqrt(exp.noise.var)) ## now automatically but need to think more
-        rownames(phe[[paste0("p", i)]]) <- rownames(geno)
-    }
-    pars.writer(genetic.pars = genetic.pars,
-                fname        = fusepar)
-    phe <- list2frame(phe)
-    if(fwrite)
-        phe.writer(phe   = phe,
-                   fname = fphename)
-    return(phe)
+    phe[[paste0("p", i)]] <- as.numeric(genetic.pars[[paste0("P", i, "mean")]]) +
+      gene.effect(geno      = geno,
+                  gene.coef = gene.coef,
+                  model     = genetic.model) +
+      rnorm(nrow(geno),
+            sd = sqrt(exp.noise.var)) ## now automatically but need to think more
+    rownames(phe[[paste0("p", i)]]) <- rownames(geno)
+  }
+  pars.writer(genetic.pars = genetic.pars,
+              fname        = fusepar)
+  phe <- list2frame(phe)
+  if(fwrite)
+    phe.writer(phe   = phe,
+               fname = fphename)
+  return(phe)
 }
 
 
@@ -223,36 +242,36 @@ gene.effect <- function(geno,
                         gene.coef,
                         model = c("epistasis"),
                         ...){
-    gene.effect <- data.frame(rep(0, nrow(geno)))
-    model <- tryCatch(match.arg(model),
-                      error = function(e) {
-                          print(e)
-                          print(class(e))
-                          frmls <- eval(formals(sys.function(1))[['model']])
-                          warning("cannot handle model '", model,
-                                  "', possible options are:\n\t",
-                                  paste0(frmls, collapse  = ', '),
-                                  "\n\nWill use default")
-                          return(frmls[1])
-             }
-             )
-    switch(model,
-       epistasis = {
+  gene.effect <- data.frame(rep(0, nrow(geno)))
+  model <- tryCatch(match.arg(model),
+                    error = function(e) {
+                      print(e)
+                      print(class(e))
+                      frmls <- eval(formals(sys.function(1))[['model']])
+                      warning("cannot handle model '", model,
+                              "', possible options are:\n\t",
+                              paste0(frmls, collapse  = ', '),
+                              "\n\nWill use default")
+                      return(frmls[1])
+                    }
+  )
+  switch(model,
+         epistasis = {
            for (i in 1:nrow(geno)){ # each individual
-               for (j in 1:length(gene.coef)){ # each interaction
-                   eff.scale <- as.matrix(genetic.scale(SNPA = geno[i, gene.coef[[paste0("epi.par", j)]]$SNPA],
-                                                        SNPB = geno[i, gene.coef[[paste0("epi.par", j)]]$SNPB]))
-                   gene.effect[i,] <- (gene.effect[i,] +
-                                           (as.matrix(gene.coef[[paste0("epi.par", j)]][c(-1, -2)]) %*% eff.scale))
-               }
+             for (j in 1:length(gene.coef)){ # each interaction
+               eff.scale <- as.matrix(genetic.scale(SNPA = geno[i, gene.coef[[paste0("epi.par", j)]]$SNPA],
+                                                    SNPB = geno[i, gene.coef[[paste0("epi.par", j)]]$SNPB]))
+               gene.effect[i,] <- (gene.effect[i,] +
+                                     (as.matrix(gene.coef[[paste0("epi.par", j)]][c(-1, -2)]) %*% eff.scale))
+             }
            }
-       },
-       ## handle any unknown model specifications here
-       {
+         },
+         ## handle any unknown model specifications here
+         {
            stop('should have never come here ...')
-       }
-    )
-    return(gene.effect)
+         }
+  )
+  return(gene.effect)
 }
 
 
@@ -288,44 +307,44 @@ get.gene.coef <- function(main.pars,
                           epi.pars,
                           model = c("epistasis"),
                           ...){
-    coef <- list()
+  coef <- list()
 
-    model <- tryCatch(match.arg(model),
-                      error = function(e) {
-                          print(e)
-                          print(class(e))
-                          frmls <- eval(formals(sys.function(1))[['model']])
-                          warning("cannot handle model '", model,
-                                  "', possible options are:\n\t",
-                                  paste0(frmls, collapse  = ', '),
-                                  "\n\nWill use default")
-                          return(frmls[1])
-             }
-             )
+  model <- tryCatch(match.arg(model),
+                    error = function(e) {
+                      print(e)
+                      print(class(e))
+                      frmls <- eval(formals(sys.function(1))[['model']])
+                      warning("cannot handle model '", model,
+                              "', possible options are:\n\t",
+                              paste0(frmls, collapse  = ', '),
+                              "\n\nWill use default")
+                      return(frmls[1])
+                    }
+  )
 
-    switch(model,
-           epistasis = {
-               for(j in 1:nrow(epi.pars)){
-                   coef[[paste0("epi.par", j)]] <- data.frame(SNPA             = epi.pars[j, "SNPA"],
-                                                              SNPB             = epi.pars[j, "SNPB"],
-                                                              stringsAsFactors = FALSE)
+  switch(model,
+         epistasis = {
+           for(j in 1:nrow(epi.pars)){
+             coef[[paste0("epi.par", j)]] <- data.frame(SNPA             = epi.pars[j, "SNPA"],
+                                                        SNPB             = epi.pars[j, "SNPB"],
+                                                        stringsAsFactors = FALSE)
 
-                   gene.eff <- unlist(c(main.pars[main.pars$SNP == epi.pars[j, "SNPA"], -1],
-                                        main.pars[main.pars$SNP == epi.pars[j, "SNPB"], -1],
-                                        epi.pars[j, 3:6]))
-                   coef[[paste0("epi.par", j)]] <- cbind(coef[[paste0("epi.par", j)]],
-                                                         matrix(gene.eff, nrow = 1))
-                   names(gene.eff)[1:2] <- paste0(names(gene.eff)[1:2], "A")
-                   names(gene.eff)[3:4] <- paste0(names(gene.eff)[3:4], "B")
-                   names(coef[[paste0("epi.par", j)]]) <- c("SNPA", "SNPB", names(gene.eff))
-               }
-           },
-           ## unknown model specifications have been handles above
-           {
-               stop('should have never come here ...')
+             gene.eff <- unlist(c(main.pars[main.pars$SNP == epi.pars[j, "SNPA"], -1],
+                                  main.pars[main.pars$SNP == epi.pars[j, "SNPB"], -1],
+                                  epi.pars[j, 3:6]))
+             coef[[paste0("epi.par", j)]] <- cbind(coef[[paste0("epi.par", j)]],
+                                                   matrix(gene.eff, nrow = 1))
+             names(gene.eff)[1:2] <- paste0(names(gene.eff)[1:2], "A")
+             names(gene.eff)[3:4] <- paste0(names(gene.eff)[3:4], "B")
+             names(coef[[paste0("epi.par", j)]]) <- c("SNPA", "SNPB", names(gene.eff))
            }
-           )
-    return(coef)
+         },
+         ## unknown model specifications have been handles above
+         {
+           stop('should have never come here ...')
+         }
+  )
+  return(coef)
 }
 
 
@@ -354,24 +373,24 @@ specify.pars <- function(genetic.pars,
                          effect.type = c("main", "epistasis"),
                          phe.index   = 1,
                          ...){
-    effect.type <- tryCatch(match.arg(effect.type),
-                      error = function(e) {
-                          print(e)
-                          print(class(e))
-                          frmls <- eval(formals(sys.function(1))[['effect.type']])
-                          warning("cannot handle effect.type '", effect.type,
-                                  "', possible options are:\n\t",
-                                  paste0(frmls, collapse  = ', '),
-                                  "\n\nWill use default")
-                          return(frmls[1])
-             }
-             )
+  effect.type <- tryCatch(match.arg(effect.type),
+                          error = function(e) {
+                            print(e)
+                            print(class(e))
+                            frmls <- eval(formals(sys.function(1))[['effect.type']])
+                            warning("cannot handle effect.type '", effect.type,
+                                    "', possible options are:\n\t",
+                                    paste0(frmls, collapse  = ', '),
+                                    "\n\nWill use default")
+                            return(frmls[1])
+                          }
+  )
 
-    effect.type.options <- eval(formals()[['effect.type']])
-    if(effect.type %in% effect.type.options)
-        return(genetic.pars[[paste0("P", phe.index, effect.type)]])
-    else
-        stop("please specify the effect type, should be one of\n\t",
-             paste(effect.type.options, collapse = ', '))
+  effect.type.options <- eval(formals()[['effect.type']])
+  if(effect.type %in% effect.type.options)
+    return(genetic.pars[[paste0("P", phe.index, effect.type)]])
+  else
+    stop("please specify the effect type, should be one of\n\t",
+         paste(effect.type.options, collapse = ', '))
 }
 

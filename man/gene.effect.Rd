@@ -40,4 +40,3 @@ gene.effect(geno, gene.coefficients)
 Beibei Jiang \email{beibei_jiang@psych.mpg.de} and
         Benno Pütz \email{puetz@psych.mpg.de}
 }
-

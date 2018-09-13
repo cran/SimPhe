@@ -30,4 +30,3 @@ check.snp.par(genepars, nphe = 2)
 \author{
 Beibei Jiang \email{beibei_jiang@psych.mpg.de}
 }
-

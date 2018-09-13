@@ -58,10 +58,10 @@ Similar blocks need to be provided for the other phenotype(s): "[P2mean]",
 # simulation parameters:
 fpar.path <- system.file("extdata", "simupars.txt", package="SimPhe")
 
-read.simu.pars(fpar.path)
+
+# pars <- read.simu.pars(fpar.path)
 }
 \author{
 Beibei Jiang \email{beibei_jiang@psych.mpg.de} and
         Benno Pütz \email{puetz@psych.mpg.de}
 }
-

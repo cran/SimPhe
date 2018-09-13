@@ -24,15 +24,15 @@ mean
 20
 
 [P2main]
-SNP additive dominance
-SNP03 6.5 1.5
-SNP04 -3.5 -1.2
-SNP07 10.4 8.6
-SNP08 12.3 11.9
+SNP   additive dominance
+SNP03     6.5     1.5
+SNP04    -3.5    -1.2
+SNP07    10.4     8.6
+SNP08    12.3    11.9
 [P2epistasis]
 
 SNPA SNPB additive_additive additive_dominance dominance_additive dominance_dominance
-SNP03 SNP04 12 5 3.5 2.5
+SNP03 SNP04 12    5    3.5  2.5
 SNP07 SNP08 21.5 20.9 20.5 20.3
 
 

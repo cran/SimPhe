@@ -1,56 +1,12 @@
----
-title: "SimPhe"
-author: "Beibei Jiang"
-date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-references:
-- id: cockerham1977quadratic
-  title: Quadratic analyses of reciprocal crosses
-  author:
-  - family: Cockerham
-    given: C. Clark
-  - family: Weir
-    given: Bruce Spencer 
-  container-title: Biometrics
-  volume: 33
-  URL: 'http://www.jstor.org/stable/2529312'
-  DOI: 10.2307/2529312
-  issue: 1
-  publisher: JSTOR
-  page: 187-203
-  type: article-journal
-  issued:
-    year: 1977
-    month: 3
-- id: kao2002modeling
-  title: Modeling epistasis of quantitative trait loci using Cockerham's model
-  author:
-  - family: Kao
-    given: Chen-Hung
-  - family: Zeng
-    given: Zhao-Bang 
-  container-title: Genetics
-  volume: 160
-  URL: 'http://www.genetics.org/content/160/3/1243'
-  DOI: 10.1534/genetics.104.035857
-  issue: 3
-  publisher: Genetics Society of America
-  page: 1243-1261
-  type: article-journal
-  issued:
-    year: 2002
-    month: 3
-nocite: |
-  @cockerham1977quadratic, @kao2002modeling
+# SimPhe
+Bug report git repository for SimPhe
 
-vignette: >
-  %\VignetteIndexEntry{SimPhe}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
-
-This vignette introduces how to use *SimPhe*, an R package dedicated to simulate multiple phenotyes based on genotyping data. The main feature of this package is the possibility to take genetic epistatic effects, not only additive-additive interaction but also additive-dominance and dominance-dominance, heritability and multiple phenotypes into account. Moreover, we provide a variety of convenient functions, including suggestion for set the variation of random variable according to user specified genetic effects and flexible support for input formats, as well as output formats. It also supports the input of plink formats.
-
+*SimPhe* is an R package dedicated to simulate multiple phenotyes based on genotyping data. 
+The main feature of this package is the possibility to take genetic epistatic effects, 
+not only additive-additive interaction but also additive-dominance and dominance-dominance, 
+heritability and multiple phenotypes into account. Moreover, we provide a variety of convenient functions, 
+including suggestion for set the variation of random variable according to user specified genetic effects 
+and flexible support for input formats, as well as output formats. It also supports the input of plink formats.
 
 ## Installation
 ```{r, eval = F, error = F, results='hide'}
@@ -75,10 +31,10 @@ fgeno.path <- system.file("extdata", "10SNP.txt", package="SimPhe")
 Then simulate the phenotypes as designed in the parameter file after loading package:
 ```{r, echo = T, results='hide'}
 # simulate phenotype(s)
-phe <- sim.phe(sim.pars = fpar.path, 
-               fgeno = fgeno.path, 
-               ftype = "snp.head", 
-               seed = 123, 
+phe <- sim.phe(sim.pars = fpar.path,
+               fgeno = fgeno.path,
+               ftype = "snp.head",
+               seed = 123,
                fwrite = FALSE)
 ```
 
@@ -134,8 +90,6 @@ exp.noise.var <- get.noise.var(gene.coef = genecoef,
 Then when simulating a phenotype, just give this value as argument
 *noise.var* to function *sim.phe*. It will generate a
 phenotype which has a heritability close to 0.45.
-
-
 
 As we mentioned earlier in this article, buiding the correlation by
 setting the shared interactive SNP pairs cannot be controlled. We can take a look at the correlation between the simulated phenotype 1 and phenotype 2:
@@ -207,3 +161,49 @@ Obviously, there is no significant difference on means and standard deviations b
 
 # References
 
+
+
+
+
+
+
+---
+- id: cockerham1977quadratic
+  title: Quadratic analyses of reciprocal crosses
+  author:
+  - family: Cockerham
+    given: C. Clark
+  - family: Weir
+    given: Bruce Spencer
+  container-title: Biometrics
+  volume: 33
+  URL: 'http://www.jstor.org/stable/2529312'
+  DOI: 10.2307/2529312
+  issue: 1
+  publisher: JSTOR
+  page: 187-203
+  type: article-journal
+  issued:
+    year: 1977
+    month: 3
+- id: kao2002modeling
+  title: Modeling epistasis of quantitative trait loci using Cockerham's model
+  author:
+  - family: Kao
+    given: Chen-Hung
+  - family: Zeng
+    given: Zhao-Bang
+  container-title: Genetics
+  volume: 160
+  URL: 'http://www.genetics.org/content/160/3/1243'
+  DOI: 10.1534/genetics.104.035857
+  issue: 3
+  publisher: Genetics Society of America
+  page: 1243-1261
+  type: article-journal
+  issued:
+    year: 2002
+    month: 3
+nocite: |
+  @cockerham1977quadratic, @kao2002modeling
+---

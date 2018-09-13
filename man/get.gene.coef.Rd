@@ -40,4 +40,3 @@ get.gene.coef(maineff.pars, epistasis.pars)
 Beibei Jiang \email{beibei_jiang@psych.mpg.de} and
                   Benno Pütz \email{puetz@psych.mpg.de}
 }
-

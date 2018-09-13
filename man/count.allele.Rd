@@ -27,4 +27,3 @@ count.allele(x)
 Beibei Jiang \email{beibei_jiang@psych.mpg.de} and
         Benno Pütz \email{puetz@psych.mpg.de}
 }
-

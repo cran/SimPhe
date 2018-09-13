@@ -15,7 +15,7 @@ fgeno.path <- system.file("extdata", "10SNP.txt", package="SimPhe")
 
 ## ---- echo = T, results='hide'-------------------------------------------
 # simulate phenotype(s)
-phe <- sim.phe(fgenetic.pars = fpar.path, 
+phe <- sim.phe(sim.pars = fpar.path, 
                fgeno = fgeno.path, 
                ftype = "snp.head", 
                seed = 123, 
@@ -72,7 +72,7 @@ cor.test(phe[, "p1"], phe[, "p2"])
 fpar.path <- system.file("extdata", "sep_simupars.txt", package="SimPhe")
 
 # simulate phenotype(s)
-indphe <- sim.phe(fgenetic.pars = fpar.path,
+indphe <- sim.phe(sim.pars = fpar.path,
                   fgeno = fgeno.path,
                   ftype = "snp.head",
                   seed = 123,

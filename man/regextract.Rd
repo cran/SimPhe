@@ -39,4 +39,3 @@ lapply(regmatches(s, gregexpr(pattern, s)), function(e) regmatches(e, regexec(pa
 \author{
 Benno Pütz \email{puetz@psych.mpg.de}
 }
-

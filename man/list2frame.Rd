@@ -28,4 +28,3 @@ str(x)
 \author{
 Beibei Jiang \email{beibei_jiang@psych.mpg.de}
 }
-

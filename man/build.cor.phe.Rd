@@ -57,4 +57,3 @@ cor.test(x.new[, 1], x.new[, 2])
 \author{
 Beibei Jiang \email{beibei_jiang@psych.mpg.de}
 }
-

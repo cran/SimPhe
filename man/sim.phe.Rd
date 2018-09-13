@@ -4,25 +4,29 @@
 \alias{sim.phe}
 \title{Simulation for phenotypes (SimPhe main process)}
 \usage{
-sim.phe(fgenetic.pars = NULL, fgeno = NULL, ftype = c("ind.head", "plink",
+sim.phe(sim.pars = NULL, fgeno = NULL, ftype = c("ind.head", "plink",
   "snp.head"), fwrite = TRUE, fphename = "simu.pheno",
   fusepar = "usedpars.txt", seed = NA, Dskim = 0, noise.var = 1,
   pattern = "[[:alpha:]]+", plink.path = system("which plink"),
   genetic.model = "epistasis", ...)
 }
 \arguments{
-\item{fgenetic.pars}{the file of parameters settings
+\item{sim.pars}{a prepared list containing the parameters settings for simulation or a file of parameters settings.
                    Please set your own parameters
-                   following the same structure as
+                   following the same structure as the object \code{genepars} or as the file
                    \code{simupars.txt}
                    (you could find example file \cr
-                   \code{system.file("extdata","simupars.txt",package="SimPhe")}).\cr
-                   To to specify heritability, there
+                   \code{system.file("extdata","simupars.txt",package="SimPhe")}).\cr\cr
+                   To specify heritability, there
                    are two ways: one is to set
-                   heritability in parameter file.
+                   heritability in parameter file or in the prepared list object which will futher pass to \code{sim.pars}.
                    Another way is to set \code{noise.var}
                    by using function \code{\link{get.noise.var}}
-                   given specify \code{heritability}. \cr
+                   given specify \code{heritability}. \cr\cr
+
+                   List format: please follow the example of the object \code{genepars}.
+                   The meaning of each elment in the list is similar like the file format description below.\cr\cr
+
                    File format: please follow the example of the \code{simupars.txt} file
                    found in the inst/extdata/ directory of the package (run \cr
                    \code{system.file("extdata", "simupars.txt", package="SimPhe")} \cr
@@ -91,7 +95,7 @@ is overridden by the heritability setting in the
 simulation parameter file. If heritability is
 given in parameter file then \code{noise.var} will not work.}
 
-\item{pattern}{match pattern for detecting the phenotype index.
+\item{pattern}{ignore pattern for detecting the phenotype index from the parameter names.
 Default is "[[:alpha:]]+" which means letters.}
 
 \item{plink.path}{path of plink executable. Only needed when the \code{ftype}
@@ -113,17 +117,28 @@ a data.frame with the simulated phenotype(s) where the column(s)
 \description{
 Main process of simulation for phenotypes
 }
+\details{
+further discussion on pattern
+}
 \examples{
 #### file path of example
-
 # simulation parameters:
 fpar.path <- system.file("extdata", "simupars.txt", package="SimPhe")
 
 # genotype file: rows are individuals and columns are SNPs
 fgeno.path <- system.file("extdata", "10SNP.txt", package="SimPhe")
 
+
+#### instead of a parameter file, prepared list like genepars also works
+genepars
+
+
 #### simulate phenotype(s)
-phe <- sim.phe(fgenetic.pars = fpar.path, fgeno = fgeno.path, ftype = "snp.head", fwrite = FALSE)
+phe <- sim.phe(sim.pars = fpar.path, fgeno = fgeno.path, ftype = "snp.head", fwrite = FALSE)
+# or
+phe <- sim.phe(sim.pars = genepars, fgeno = fgeno.path, ftype = "snp.head", fwrite = FALSE)
+
+# the simulated phenotype(s)
 str(phe)
 head(phe)
 }
@@ -131,4 +146,3 @@ head(phe)
 Beibei Jiang \email{beibei_jiang@psych.mpg.de} and
                   Benno Pütz \email{puetz@psych.mpg.de}
 }
-

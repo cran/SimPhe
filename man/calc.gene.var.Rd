@@ -42,4 +42,3 @@ calc.gene.var(gene.coefficients, allele.freq)
 \author{
 Beibei Jiang \email{beibei_jiang@psych.mpg.de}
 }
-

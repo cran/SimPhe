@@ -32,4 +32,3 @@ get.noise.var(gene.coefficients, allele.freq, 0.5)
 \author{
 Beibei Jiang \email{beibei_jiang@psych.mpg.de}
 }
-

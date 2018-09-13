@@ -18,4 +18,3 @@ A dataset containing sample allele frequencies of SNPs.
 allele.freq.
 }
 \keyword{datasets}
-

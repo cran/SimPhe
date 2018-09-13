@@ -21,4 +21,3 @@ A dataset containing the parameter settings for epistatic effects.
 epistasis.pars.
 }
 \keyword{datasets}
-

@@ -29,7 +29,7 @@
 ##' If the path cannot be determined or the executable cannot be called from \code{read.geno},
 ##' then users have to try other formats.
 ##' @param ... not used.
-##' @return a dataframe of genotype data: columns are the SNPs; lines are indviduals.
+##' @return a dataframe of genotype data: columns are the SNPs; rows are indviduals.
 ##' @author Beibei Jiang \email{beibei_jiang@@psych.mpg.de} and
 ##'         Benno Pütz \email{puetz@@psych.mpg.de}
 ##' @examples

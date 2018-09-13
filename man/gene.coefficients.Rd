@@ -54,4 +54,3 @@ A dataset containing the regression coefficients of genetic effects.
 gene.coefficients.
 }
 \keyword{datasets}
-

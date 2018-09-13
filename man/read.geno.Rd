@@ -42,7 +42,7 @@ then users have to try other formats.}
 \item{...}{not used.}
 }
 \value{
-a dataframe of genotype data: columns are the SNPs; lines are indviduals.
+a dataframe of genotype data: columns are the SNPs; rows are indviduals.
 }
 \description{
 Read genotype data.
@@ -70,4 +70,3 @@ fpath <- strsplit(fgeno.path, "10SNP.txt")
 Beibei Jiang \email{beibei_jiang@psych.mpg.de} and
         Benno Pütz \email{puetz@psych.mpg.de}
 }
-
